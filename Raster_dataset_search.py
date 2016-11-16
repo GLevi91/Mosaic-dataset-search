@@ -1,4 +1,4 @@
-﻿import os, sys, arcpy
+import os, sys, arcpy
 import arcpy.mapping
 
 reload (sys)
@@ -29,10 +29,11 @@ for folder in inputFolderParameters.split(";"):
    for row in searchcursor:
       rowvalue = row.getValue(desc)
       polygonextent = rowvalue.extent
-	  
+	  polygonprojection = polygonextent.spatialReference
+
       for raster in arcpy.ListRasters("*"):
          rasterdescribe = arcpy.Describe(raster)
-         rasterextent = rasterdescribe.extent
+         rasterextent = rasterdescribe.extent.projectAs(polygonprojection)
 		 
          if polygonextent.disjoint(rasterextent):
             pass
